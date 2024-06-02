@@ -1,5 +1,6 @@
 library(shiny)
 library(ggplot2)
+library(tidyr)
 data_file_path = "~/git/puppies/weights_long.csv"
 load_data = function(){
 	return(read.csv(data_file_path) %>% as_tibble())
