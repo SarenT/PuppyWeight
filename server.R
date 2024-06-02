@@ -1,6 +1,8 @@
 library(shiny)
 library(ggplot2)
 library(tidyr)
+library(dplyr)
+
 data_file_path = "~/git/puppies/weights_long.csv"
 load_data = function(){
 	return(read.csv(data_file_path) %>% as_tibble())
@@ -22,6 +24,16 @@ server = function(input, output, session) {
 		current_data = load_data()
 		updated_data = add_row(current_data, name = input$puppy, date = as.character(input$date), weight = input$weight)
 		write.csv(updated_data, data_file_path, row.names = F)
+		update(update() + 1)
+	})
+	
+	observeEvent(input$delete, {
+		row = input$data_rows_current
+		if(is.null(input$data_rows_selected)){
+			return()
+		}
+		
+		write.csv(data()[-1 * input$data_rows_selected, ], data_file_path, row.names = F)
 		update(update() + 1)
 	})
 	
